@@ -1,5 +1,9 @@
 {% extends 'polls/base.html' %}
 
+{% block header %}
+    <title>KU Polls::Result::{{ question.question_text }}</title>
+{% endblock %}
+
 {% block main_content %}
     <h1>{{ question.question_text }}</h1>
 
