@@ -6,8 +6,8 @@ from django.urls import reverse
 
 # Create your views here.
 def index(request):
-    latest_questions = Question.objects.order_by('-pub_date')[:5]
-    return render(request, "polls/index.html", {"latest_question": latest_questions})
+    latest_questions = Question.objects.order_by('-pub_date')
+    return render(request, "polls/index.html", {"latest_question": reversed(latest_questions)})
 
 
 def detail(request, question_id):
