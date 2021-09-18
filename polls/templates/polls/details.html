@@ -5,16 +5,34 @@
 {% endblock %}
 
 {% block main_content %}
-    <h1>{{ question.question_text }}</h1>
-
-    {% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
-
-    <form action="{% url 'polls:vote' question.id %}" method="post">
-        {% csrf_token %}
-        {% for choice in question.choice_set.all %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-        {% endfor %}
-        <input type="submit" value="vote"/>
-    </form>
+    <div class="d-flex align-items-center justify-content-center" style="padding: 20px 20px 0px 20px;">
+        <table class="content-table w-75 submit-table" style="background-color: white;">
+        <thead>
+            <tr>
+                <th class="text-center"><h1>{{ question.question_text }}</h1></th>
+            </tr>
+        </thead>
+        <tbody>
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            {% for choice in question.choice_set.all %}
+                <tr style="background-color: white;"><td>
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                </td></tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="submit-cell"><td>
+            <input type="submit" value="vote"/>
+            </td></tr>
+        </form>
+        </tfoot>
+        </table>
+    </div>
+        {% if error_message %}
+            <div class="d-flex justify-content-center" style="color: red;">
+                <strong>{{ error_message }}</strong>
+            </div>
+        {% endif %}
 {% endblock %}
