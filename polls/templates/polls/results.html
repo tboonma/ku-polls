@@ -5,12 +5,57 @@
 {% endblock %}
 
 {% block main_content %}
-    <h1>{{ question.question_text }}</h1>
-
+    <div class="d-flex align-items-center justify-content-center" style="padding: 20px 20px 0px 20px;">
+        <table class="content-table w-75" style="background-color: white;">
+            <thead>
+            <tr>
+                <th class="text-center" colspan="3"><h1>{{ question.question_text }}</h1></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td rowspan="{{ question.choice_set.all.count }}">
+                <canvas id="pie-chart"></canvas>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <ul>
         {% for choice in question.choice_set.all %}
             <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
         {% endfor %}
     </ul>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+        colors = [];
+        function getColor() {
+            var randomColor = Math.floor(Math.random()*16777215).toString(16);
+            return "#" + randomColor;
+        };
+
+        var config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: {{ data|safe }},
+                    backgroundColor: [
+                        getColor(), getColor(), getColor(), getColor(), getColor(),
+                    ],
+                    label: 'Vote'
+                }],
+                labels: {{ labels|safe }}
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+        window.onload = function () {
+            var ctx = document.getElementById('pie-chart').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        };
+
+    </script>
 {% endblock %}
