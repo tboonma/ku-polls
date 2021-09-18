@@ -3,7 +3,6 @@
 
 {% block header %}
     <title>KU Polls</title>
-    <link rel="stylesheet" href="{% static 'polls/css/main.css' %}">
 {% endblock %}
 
 {% block main_content %}
@@ -12,20 +11,25 @@
         <table class="content-table w-75" style="background-color: white;">
             <thead>
                 <tr>
-                    <th class="col-6 text-center" colspan="2">Available polls</th>
+                    <th class="text-center" colspan="3">Available polls</th>
                 </tr>
             </thead>
             <tbody>
                 {% for question in latest_question %}
                 <tr>
-                    <td>{{ question.question_text }}</td>
-                    <td><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote now</a></td>
+                    <td class="col-9">{{ question.question_text }}</td>
+                    {% if question.can_vote %}
+                        <td><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote</a></td>
+                    {% else %}
+                        <td><a href="{% url "polls:detail" question.id %}" class="disabled-vote-btn btn btn-primary disabled">Vote</a></td>
+                    {% endif %}
+                    <td><a href="{% url "polls:results" question.id %}" class="vote-btn btn btn-primary">Result</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
     {% else %}
-        <p> You don't have any question. Please create one.</p>
+        <p>No polls are available. Please create one.</p>
     {% endif %}
 {% endblock %}

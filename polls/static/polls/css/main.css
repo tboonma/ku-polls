@@ -6,9 +6,9 @@ body {
     border-collapse: collapse;
     margin: 25px 0;
     min-width: 400px;
-    border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 5px 5px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, .15);
+    box-shadow: 0 0 25px rgba(0, 0, 0, .15);
 }
 
 .content-table thead tr {
@@ -35,6 +35,14 @@ body {
     border-bottom:2px solid #009879;
 }
 
+.submit-table tbody td:hover {
+    background-color: #CAE0A4;
+}
+
+.submit-table tfoot tr {
+    background-color: #009879;
+}
+
 .vote-btn {
     background-color: #00587A;
     border: 1px solid #00587A;
@@ -43,4 +51,9 @@ body {
 .vote-btn:hover {
     background-color: white;
     color: #00587A;
+}
+
+.disabled-vote-btn {
+    background-color: #99E2FF !important;
+    border: 1px solid #99E2FF !important;
 }
