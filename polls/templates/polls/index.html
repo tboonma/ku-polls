@@ -6,12 +6,18 @@
 {% endblock %}
 
 {% block main_content %}
+    <div class="container" style="padding: 20px; height:100%;">
+    <div class="row d-flex justify-content-center" style="padding-top: 20px">
+        <div class="w-75">
+            <h1 style="color: #009879;">KU Polls</h1>
+        </div>
+    </div>
     {% if latest_question %}
-    <div class="d-flex align-items-center justify-content-center" style="padding: 20px; height:100%;">
-        <table class="content-table w-75" style="background-color: white;">
+        <div class="row d-flex justify-content-center">
+        <table class="content-table w-75">
             <thead>
                 <tr>
-                    <th class="text-center" colspan="3">Available polls</th>
+                    <th class="text-center" colspan="3" style="font-size: 16px;">Available polls</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,8 +34,9 @@
             {% endfor %}
             </tbody>
         </table>
-    </div>
+        </div>
     {% else %}
         <p>No polls are available. Please create one.</p>
     {% endif %}
+    </div>
 {% endblock %}
