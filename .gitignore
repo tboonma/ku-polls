@@ -137,3 +137,5 @@ dmypy.json
 .pydevproject
 .vscode/
 .DS_Store
+polls/migrations/
+polls/migrations/*
