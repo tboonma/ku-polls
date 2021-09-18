@@ -6,10 +6,15 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="container" style="padding: 20px; height:100%;">
-    <div class="row d-flex justify-content-center" style="padding-top: 20px">
-        <div class="w-75">
-            <h1 style="color: #009879;">KU Polls</h1>
+    <div style="padding: 20px 0;">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="w-75 d-flex align-items-center justify-content-center" style="padding-top: 20px;">
+            <div class="col-9">
+                <h1 style="color: #009879;">KU Polls</h1>
+            </div>
+            <div class="col-3">
+{#                <div style="float: right !important;"><button class=" btn btn-primary" onClick="window.location.reload();">Create new</button></div>#}
+            </div>
         </div>
     </div>
     {% if latest_question %}
@@ -22,14 +27,14 @@
             </thead>
             <tbody>
                 {% for question in latest_question %}
-                <tr>
-                    <td class="col-9">{{ question.question_text }}</td>
+                <tr class="row d-flex align-items-center justify-content-center">
+                    <td class="col col-lg-9" style="display: inline-block;" id="quesion-txt">{{ question.question_text }}</td>
                     {% if question.can_vote %}
-                        <td><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote</a></td>
+                        <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote</a></td>
                     {% else %}
-                        <td><a href="{% url "polls:detail" question.id %}" class="disabled-vote-btn btn btn-primary disabled">Vote</a></td>
+                        <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:detail" question.id %}" class="disabled-vote-btn btn btn-primary disabled">Vote</a></td>
                     {% endif %}
-                    <td><a href="{% url "polls:results" question.id %}" class="vote-btn btn btn-primary">Result</a></td>
+                    <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:results" question.id %}" class="vote-btn btn btn-primary">Result</a></td>
                 </tr>
             {% endfor %}
             </tbody>

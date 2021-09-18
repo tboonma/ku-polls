@@ -5,27 +5,52 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="d-flex align-items-center justify-content-center" style="padding: 20px 20px 0px 20px;">
-        <table class="content-table w-75" style="background-color: white;">
+    <div class="d-flex align-items-center justify-content-center" style="padding: 20px 20px 0 20px;">
+        <div class="row justify-content-between w-50">
+            <div class="col-6"><a class="home-btn btn btn-primary" href="/" role="button">Home</a></div>
+            <div class="col-6"><button class="btn btn-primary" onClick="window.location.reload();" style="float: right !important;">Regenerate color</button></div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="padding: 0 20px 0 20px;">
+        <table class="content-table w-50" style="background-color: white;">
             <thead>
             <tr>
-                <th class="text-center" colspan="3"><h1>{{ question.question_text }}</h1></th>
+                <th class="text-center"><h2>{{ question.question_text }}</h2></th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td rowspan="{{ question.choice_set.all.count }}">
-                <canvas id="pie-chart"></canvas>
+                <td>
+                    <div class="w-100 d-flex align-items-center justify-content-center">
+                        <div class="w-75"><canvas id="pie-chart"></canvas></div>
+                    </div>
+                    <span><strong>Tap</strong> or <strong>point</strong> at pie color to see details.</span>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <ul>
-        {% for choice in question.choice_set.all %}
-            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-        {% endfor %}
-    </ul>
+    <div class="d-flex align-items-center justify-content-center" style="padding: 40px 20px 20px 20px;">
+        <table class="content-table w-25">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="2" style="font-size: 16px;">Details</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Choice</th>
+                    <th class="text-center">Vote</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for choice in question.choice_set.all %}
+                <tr>
+                    <td class="text-center">{{ choice.choice_text }}</td>
+                    <td class="text-center">{{ choice.votes }} vote{{ choice.votes|pluralize }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
@@ -33,16 +58,16 @@
         function getColor() {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             return "#" + randomColor;
-        };
-
+        }
+        {% for i in question.choice_set.all %}
+            colors.push(getColor());
+        {% endfor %}
         var config = {
             type: 'pie',
             data: {
                 datasets: [{
                     data: {{ data|safe }},
-                    backgroundColor: [
-                        getColor(), getColor(), getColor(), getColor(), getColor(),
-                    ],
+                    backgroundColor: colors,
                     label: 'Vote'
                 }],
                 labels: {{ labels|safe }}

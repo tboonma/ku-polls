@@ -7,7 +7,7 @@ body {
 
 .content-table {
     border-collapse: collapse;
-    margin: 25px 0;
+    margin: 5px 0;
     min-width: 400px;
     border-radius: 10px 10px 5px 5px;
     overflow: hidden;
@@ -44,6 +44,13 @@ body {
 
 .submit-table tfoot tr {
     background-color: #009879;
+}
+
+@media screen and (max-width: 675px) {
+   #question-txt {
+       width: 100%;
+       text-align: center;
+   }
 }
 
 .vote-btn {
