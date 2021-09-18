@@ -34,3 +34,13 @@ body {
 .content-table tbody tr:last-of-type {
     border-bottom:2px solid #009879;
 }
+
+.vote-btn {
+    background-color: #00587A;
+    border: 1px solid #00587A;
+}
+
+.vote-btn:hover {
+    background-color: white;
+    color: #00587A;
+}

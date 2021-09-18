@@ -8,19 +8,18 @@
 
 {% block main_content %}
     {% if latest_question %}
-    <div class="d-flex align-items-center justify-content-center" style="padding: 20px; height:100vh;">
+    <div class="d-flex align-items-center justify-content-center" style="padding: 20px; height:100%;">
         <table class="content-table w-75" style="background-color: white;">
             <thead>
                 <tr>
-                    <th class="col-10">Available polls</th>
-                    <th></th>
+                    <th class="col-6 text-center" colspan="2">Available polls</th>
                 </tr>
             </thead>
             <tbody>
                 {% for question in latest_question %}
                 <tr>
                     <td>{{ question.question_text }}</td>
-                    <td><a href="{% url "polls:detail" question.id %}" class="btn btn-primary" style="background-color: #254E70; border: 1px solid #254E70;"><span>Vote now </span></a></td>
+                    <td><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote now</a></td>
                 </tr>
             {% endfor %}
             </tbody>
