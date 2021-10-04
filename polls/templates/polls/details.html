@@ -7,33 +7,40 @@
 {% block main_content %}
     <div class="d-flex align-items-center justify-content-center" style="padding: 40px 20px 0 20px;">
         <div class="row justify-content-between w-50">
-            <div class="col-6"><a class="home-btn btn btn-primary" href="/" role="button">Home</a></div>
+            <div class="col-6"><a class="vote-btn back-btn btn btn-primary" href="/" role="button"><span>Home</span></a></div>
         </div>
     </div>
-    <div>
-    <div class="d-flex flex-column min-vh-100 align-items-center" style="padding: 0 20px 0 20px;">
+    <div class="d-flex flex-column align-items-center" style="padding: 0 20px 0 20px;">
         <table class="content-table w-50 submit-table" style="background-color: white;">
         <thead>
             <tr>
                 <th class="text-center"><h2>{{ question.question_text }}</h2></th>
             </tr>
         </thead>
-        <tbody>
         <form action="{% url 'polls:vote' question.id %}" method="post">
+        <tbody>
             {% csrf_token %}
             {% for choice in question.choice_set.all %}
-                <tr style="background-color: white;"><td>
-                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
-                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                <tr style="background-color: #f7f7f7; border-bottom: 0;"><td style="padding: 5px">
+                    <label class="vote-labl" for="choice{{ forloop.counter }}">
+                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+                        <div><div>{{ choice.choice_text }}</div></div>
+                    </label>
                 </td></tr>
             {% endfor %}
         </tbody>
         <tfoot>
-            <tr class="submit-cell"><td>
-            <input type="submit" value="vote"/>
-            </td></tr>
-        </form>
+            {% if not question.choice_set.all %}
+                <tr><td style="padding: 0;">
+                    <div class="submit-btn text-center">No choice created for this poll</div>
+                </td></tr>
+            {% else %}
+                <tr><td style="padding: 0;">
+                <input class="submit-btn" type="submit" value="Vote"/>
+                </td></tr>
+            {% endif %}
         </tfoot>
+        </form>
         </table>
     </div>
         {% if error_message %}
