@@ -32,7 +32,7 @@
                     {% if question.can_vote %}
                         <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:detail" question.id %}" class="vote-btn btn btn-primary">Vote</a></td>
                     {% else %}
-                        <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:detail" question.id %}" class="disabled-vote-btn btn btn-primary disabled">Vote</a></td>
+                        <td class="col-md-auto text-center" style="display: inline-block;"><button class="disabled-vote-btn btn btn-primary not-allowed">Vote</button></td>
                     {% endif %}
                     <td class="col-md-auto text-center" style="display: inline-block;"><a href="{% url "polls:results" question.id %}" class="vote-btn btn btn-primary">Result</a></td>
                 </tr>
