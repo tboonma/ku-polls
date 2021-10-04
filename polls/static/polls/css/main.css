@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
 
 body {
     background-color: #F0F0F0;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Source Sans Pro', 'Prompt', sans-serif;
 }
 
 .content-table {
@@ -38,19 +39,77 @@ body {
     border-bottom:2px solid #009879;
 }
 
-.submit-table tbody td:hover {
-    background-color: #CAE0A4;
-}
-
-.submit-table tfoot tr {
-    background-color: #009879;
-}
-
 @media screen and (max-width: 675px) {
    #question-txt {
        width: 100%;
        text-align: center;
    }
+}
+
+.submit-table tfoot tr {
+    background-color: #009879;
+    padding: 0;
+}
+
+.submit-table tfoot tr td {
+    padding: 12px 14px;
+    overflow: hidden;
+}
+
+.vote-labl {
+    display : block;
+    width : 100%;
+    height : 100%;
+    cursor: pointer;
+}
+
+.vote-labl input {
+    visibility: hidden;
+    position: absolute;
+}
+
+.vote-labl div {
+    border: 2px solid transparent;
+    padding: 0 5px;
+    text-align: center;
+}
+
+.vote-labl div div {
+    padding: 9px 9px;
+}
+
+.vote-labl input:hover + div div {
+    background-color: #CAE0A4;
+    border-radius: 5px;
+}
+
+.vote-labl input:checked + div div {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+    color: #009879;
+    transition: 0.25s;
+}
+
+.vote-labl input:checked:hover + div div {
+    background-color: white;
+    cursor: default;
+}
+
+.submit-btn {
+    background-color: #009879;
+    border: 1px solid #009879;
+    padding: 9px 14px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-size: 20px;
+}
+
+.submit-btn:hover {
+    background-color: #00634f;
+    border: 1px solid #00634f;
+    color: white;
 }
 
 .vote-btn {
@@ -64,6 +123,31 @@ body {
 }
 
 .disabled-vote-btn {
-    background-color: #99E2FF !important;
-    border: 1px solid #99E2FF !important;
+    cursor: not-allowed !important;
+    background-color: #99bcca !important;
+    border: 1px solid #99bcca !important;
+}
+
+.back-btn span {
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.back-btn span:after {
+  content: '←';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: -20px;
+  transition: 0.5s;
+}
+
+.back-btn:hover span {
+  padding-left: 25px;
+}
+
+.back-btn:hover span:after {
+  opacity: 1;
+  left: 0;
 }
