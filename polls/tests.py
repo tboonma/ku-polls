@@ -3,6 +3,7 @@ from polls.models import Question, Choice
 from django.utils import timezone
 import datetime
 from django.urls import reverse
+import unittest
 
 # Create your tests here.
 class QuestionModelTests(TestCase):
@@ -14,7 +15,7 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
-        self.assertIs(future_question.is_published(), False)
+        self.assertFalse(future_question.is_published())
 
     def test_is_published_with_recent_question(self):
         """
@@ -23,7 +24,7 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
-        self.assertIs(recent_question.is_published(), True)
+        self.assertTrue(recent_question.is_published())
 
     def test_can_vote_with_future_question(self):
         """
@@ -32,7 +33,7 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now() + datetime.timedelta(days=30)
         future_question = Question(pub_date=time)
-        self.assertIs(future_question.can_vote(), False)
+        self.assertFalse(future_question.can_vote())
 
     def test_can_vote_with_old_question(self):
         """
@@ -41,7 +42,7 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now() - datetime.timedelta(days=2, seconds=1)
         old_question = Question(pub_date=timezone.now(), end_date=time)
-        self.assertIs(old_question.can_vote(), False)
+        self.assertFalse(old_question.can_vote())
 
     def test_can_vote_with_recent_question(self):
         """
@@ -50,7 +51,7 @@ class QuestionModelTests(TestCase):
         """
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
-        self.assertIs(recent_question.can_vote(), True)
+        self.assertTrue(recent_question.can_vote())
 
 
 def create_question(question_text, days):
@@ -141,5 +142,3 @@ class QuestionDetailViewTests(TestCase):
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
-
-
