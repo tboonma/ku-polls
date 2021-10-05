@@ -15,11 +15,6 @@ class Question(models.Model):
         """Generate output for question object."""
         return self.question_text
 
-    def was_published_recently(self):
-        """Check that question can be published, and can be vote."""
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
-
     def is_published(self):
         """Check that question can be displayed."""
         now = timezone.now()
