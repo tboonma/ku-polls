@@ -1,6 +1,6 @@
 """Module used to test polls models."""
 from django.test import TestCase
-from polls.models import Question
+from polls.models import Question, Choice
 from django.utils import timezone
 import datetime
 from django.urls import reverse
@@ -98,3 +98,13 @@ class QuestionIndexViewTests(TestCase):
             response.context['latest_question'],
             [question2, question1],
         )
+
+
+class ChoiceModelTests(TestCase):
+    """Test methods in Choice Model."""
+    
+    def test_choice_display_correctly(self):
+        """Test that choice can be displayed correctly including question."""
+        question = create_question(question_text="How do you go to the university.", days=0)
+        choice = Choice.objects.create(choice_text="BTS", question=question)
+        self.assertEqual("How do you go to the university. - BTS", choice.__str__())
