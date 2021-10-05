@@ -20,7 +20,7 @@ before_script:
 
 # script to run tests. Script can have many commands, one per line.
 script:
-  - flake8
+  - flake8 --config config.cfg
   - coverage run manage.py test
 
 # send the result to Codecov
