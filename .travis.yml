@@ -19,7 +19,7 @@ before_script:
   - python manage.py migrate
 
 # script to run tests. Script can have many commands, one per line.
-script: 
+script:
   - flake8
   - coverage run manage.py test
 
