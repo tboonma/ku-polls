@@ -102,7 +102,7 @@ class QuestionIndexViewTests(TestCase):
 
 class ChoiceModelTests(TestCase):
     """Test methods in Choice Model."""
-    
+
     def test_choice_display_correctly(self):
         """Test that choice can be displayed correctly including question."""
         question = create_question(question_text="How do you go to the university.", days=0)

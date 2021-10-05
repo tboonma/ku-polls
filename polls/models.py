@@ -1,7 +1,6 @@
 """Module contains models for polls app (similar to database)."""
 from django.db import models
 from django.utils import timezone
-import datetime
 
 
 class Question(models.Model):
