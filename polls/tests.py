@@ -6,6 +6,14 @@ import datetime
 from django.urls import reverse
 
 
+def create_question(question_text, days):
+    """Create a question with the given `question_text` and published the \
+    given number of `days` offset to now (negative for questions published \
+    in the past, positive for questions that have yet to be published)."""
+    time = timezone.now() + datetime.timedelta(days=days)
+    return Question.objects.create(question_text=question_text, pub_date=time)
+
+
 class QuestionModelTests(TestCase):
     """Test methods in Question Model."""
 
@@ -39,13 +47,10 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertTrue(recent_question.can_vote())
 
-
-def create_question(question_text, days):
-    """Create a question with the given `question_text` and published the \
-    given number of `days` offset to now (negative for questions published \
-    in the past, positive for questions that have yet to be published)."""
-    time = timezone.now() + datetime.timedelta(days=days)
-    return Question.objects.create(question_text=question_text, pub_date=time)
+    def test_question_txt_display(self):
+        """Test that question model can display text correctly."""
+        question = create_question(question_text="How do you go to the university.", days=0)
+        self.assertEqual("How do you go to the university.", question.__str__())
 
 
 class QuestionIndexViewTests(TestCase):
