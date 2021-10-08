@@ -22,7 +22,7 @@ class QuestionTests(TestCase):
     """Test for Question model."""
 
     def setUp(self):
-        """Setting up all necessary questions."""
+        """Initialize all necessary questions."""
         self.recent_question = create_question(question_text="Question1", days=0)
         self.ended_question = create_question(question_text="Question2", days=-10, end_day=-5)
         self.future_question = create_question(question_text="Question3", days=10)
@@ -153,8 +153,8 @@ class QuestionResultViewTests(QuestionTests):
 
     def test_choice_displayed(self):
         """Test that all choice displayed correctly."""
-        choice1 = Choice.objects.create(choice_text="1", question=self.recent_question)
-        choice2 = Choice.objects.create(choice_text="2", question=self.recent_question)
+        Choice.objects.create(choice_text="1", question=self.recent_question)
+        Choice.objects.create(choice_text="2", question=self.recent_question)
         response = self.client.get(reverse('polls:results', kwargs={'pk': self.recent_question.id}))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['labels'], ["1", "2"])
@@ -199,10 +199,10 @@ class QuestionVoteTests(QuestionTests):
         choice2 = Choice.objects.get(id=choice2.id)
         self.assertEqual(0, choice1.votes)
         self.assertEqual(0, choice2.votes)
-    
+
     def test_vote_with_no_choice_selected(self):
         """Test submit vote with no choice selected, should get error message."""
-        choice1 = Choice.objects.create(choice_text="7", question=self.recent_question)
+        Choice.objects.create(choice_text="7", question=self.recent_question)
         response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please select a choice")
