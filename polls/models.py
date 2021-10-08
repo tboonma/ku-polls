@@ -17,7 +17,6 @@ class Question(models.Model):
 
     @admin.display(
         boolean=True,
-        ordering='pub_date',
         description='Published recently?',
     )
     def is_published(self):
@@ -25,6 +24,10 @@ class Question(models.Model):
         now = timezone.now()
         return self.pub_date <= now
 
+    @admin.display(
+        boolean=True,
+        description='Can be vote?',
+    )
     def can_vote(self):
         """Check that question still can be vote."""
         now = timezone.now()
