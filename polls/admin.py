@@ -6,6 +6,8 @@ from .models import Question, Choice
 
 
 class ChoiceInline(admin.StackedInline):
+    """Display inline in create question page."""
+
     model = Choice
     extra = 2
     fieldsets = [
@@ -14,6 +16,8 @@ class ChoiceInline(admin.StackedInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    """Custom question list in admin page."""
+
     fieldsets = [
         (None, {'fields': ['question_text']}),
         ('Date information', {'fields': ['pub_date', 'end_date'], 'classes': ['collapse']}),
@@ -25,6 +29,8 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class ChoiceAdmin(admin.ModelAdmin):
+    """Custom choice list in admin page."""
+
     fieldsets = [
         ('Question', {'fields': ['question']}),
         ('Choice information', {'fields': ['choice_text', 'votes']}),
