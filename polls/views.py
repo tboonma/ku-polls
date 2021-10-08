@@ -1,7 +1,7 @@
 """Module contains functions for link url to the page."""
 from django.shortcuts import render, get_object_or_404
 from .models import Question
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
@@ -31,7 +31,7 @@ class DetailView(generic.DetailView):
     template_name = 'polls/details.html'
 
     def get_queryset(self):
-        """Excludes any questions that aren't published yet."""
+        """Excludes any questions that ended and aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now()).exclude(end_date__lte=timezone.now())
 
 
@@ -55,10 +55,16 @@ class ResultsView(generic.DetailView):
         context['data'] = data
         return context
 
+    def get_queryset(self):
+        """Excludes any questions that aren't published yet."""
+        return Question.objects.filter(pub_date__lte=timezone.now())
+
 
 def vote(request, question_id):
     """Vote page that process vote privately and return to result page if success."""
     question = get_object_or_404(Question, pk=question_id)
+    if not question.can_vote():
+        return HttpResponseNotFound("This poll cannot be voted.")
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except Exception:
@@ -66,5 +72,4 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-
         return HttpResponseRedirect(reverse('polls:results', args=[question.id],))
