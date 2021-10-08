@@ -6,12 +6,26 @@ import datetime
 from django.urls import reverse
 
 
-def create_question(question_text, days):
+def create_question(question_text, days, end_day=None):
     """Create a question with the given `question_text` and published the \
     given number of `days` offset to now (negative for questions published \
     in the past, positive for questions that have yet to be published)."""
     time = timezone.now() + datetime.timedelta(days=days)
-    return Question.objects.create(question_text=question_text, pub_date=time)
+    if end_day is not None:
+        end_time = timezone.now() + datetime.timedelta(days=end_day)
+        return Question.objects.create(question_text=question_text, pub_date=time, end_date=end_time)
+    else:
+        return Question.objects.create(question_text=question_text, pub_date=time)
+
+
+class QuestionTests(TestCase):
+    """Test for Question model."""
+
+    def setUp(self):
+        """Setting up all necessary questions."""
+        self.recent_question = create_question(question_text="Question1", days=0)
+        self.ended_question = create_question(question_text="Question2", days=-10, end_day=-5)
+        self.future_question = create_question(question_text="Question3", days=10)
 
 
 class QuestionModelTests(TestCase):
@@ -98,6 +112,100 @@ class QuestionIndexViewTests(TestCase):
             response.context['latest_question'],
             [question2, question1],
         )
+
+
+class QuestionDetailViewTests(QuestionTests):
+    """Test for viewing each question detail."""
+
+    def test_view_recent_question(self):
+        """View the available question."""
+        response = self.client.get(reverse('polls:detail', kwargs={'pk': self.recent_question.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_ended_question(self):
+        """View ended poll should return error 404."""
+        response = self.client.get(reverse('polls:detail', kwargs={'pk': self.ended_question.id}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_future_question(self):
+        """View the question that gonna be available in the future."""
+        response = self.client.get(reverse('polls:detail', kwargs={'pk': self.future_question.id}))
+        self.assertEqual(response.status_code, 404)
+
+
+class QuestionResultViewTests(QuestionTests):
+    """Test for viewing result in each question."""
+
+    def test_view_recent_result(self):
+        """Test for viewing available poll result."""
+        response = self.client.get(reverse('polls:results', kwargs={'pk': self.recent_question.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_ended_result(self):
+        """Test for viewing ended poll result."""
+        response = self.client.get(reverse('polls:results', kwargs={'pk': self.ended_question.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_future_result(self):
+        """Test for viewing future poll, this shouldn’t be appeared."""
+        response = self.client.get(reverse('polls:results', kwargs={'pk': self.future_question.id}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_choice_displayed(self):
+        """Test that all choice displayed correctly."""
+        choice1 = Choice.objects.create(choice_text="1", question=self.recent_question)
+        choice2 = Choice.objects.create(choice_text="2", question=self.recent_question)
+        response = self.client.get(reverse('polls:results', kwargs={'pk': self.recent_question.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['labels'], ["1", "2"])
+        self.assertQuerysetEqual(response.context['data'], [0, 0])
+
+
+class QuestionVoteTests(QuestionTests):
+    """Test for voting a question."""
+
+    def test_vote_recent_question(self):
+        """After voting the available poll, the result should increase."""
+        choice1 = Choice.objects.create(choice_text="1", question=self.recent_question)
+        choice2 = Choice.objects.create(choice_text="2", question=self.recent_question)
+        response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}),
+                                    {'choice': choice1.id})
+        self.assertEqual(response.status_code, 302)
+        choice1 = Choice.objects.get(id=choice1.id)
+        choice2 = Choice.objects.get(id=choice2.id)
+        self.assertEqual(1, choice1.votes)
+        self.assertEqual(0, choice2.votes)
+
+    def test_vote_ended_question(self):
+        """After voting ended question (can be access by hacking), the result should still the same."""
+        choice1 = Choice.objects.create(choice_text="3", question=self.ended_question)
+        choice2 = Choice.objects.create(choice_text="4", question=self.ended_question)
+        response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.ended_question.id}),
+                                    {'choice': choice1.id})
+        self.assertEqual(response.status_code, 404)
+        choice1 = Choice.objects.get(id=choice1.id)
+        choice2 = Choice.objects.get(id=choice2.id)
+        self.assertEqual(0, choice1.votes)
+        self.assertEqual(0, choice2.votes)
+
+    def test_vote_future_question(self):
+        """Test that the poll that is not published cannot be voted."""
+        choice1 = Choice.objects.create(choice_text="5", question=self.future_question)
+        choice2 = Choice.objects.create(choice_text="6", question=self.future_question)
+        response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.future_question.id}),
+                                    {'choice': choice1.id})
+        self.assertEqual(response.status_code, 404)
+        choice1 = Choice.objects.get(id=choice1.id)
+        choice2 = Choice.objects.get(id=choice2.id)
+        self.assertEqual(0, choice1.votes)
+        self.assertEqual(0, choice2.votes)
+    
+    def test_vote_with_no_choice_selected(self):
+        """Test submit vote with no choice selected, should get error message."""
+        choice1 = Choice.objects.create(choice_text="7", question=self.recent_question)
+        response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please select a choice")
 
 
 class ChoiceModelTests(TestCase):
