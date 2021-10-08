@@ -1,6 +1,7 @@
 """Module contains models for polls app (similar to database)."""
 from django.db import models
 from django.utils import timezone
+from django.contrib import admin
 
 
 class Question(models.Model):
@@ -14,6 +15,11 @@ class Question(models.Model):
         """Generate output for question object."""
         return self.question_text
 
+    @admin.display(
+        boolean=True,
+        ordering='pub_date',
+        description='Published recently?',
+    )
     def is_published(self):
         """Check that question can be displayed."""
         now = timezone.now()
@@ -36,4 +42,4 @@ class Choice(models.Model):
 
     def __str__(self):
         """Generate output for choice object."""
-        return f"{self.question.question_text} - {self.choice_text}"
+        return self.choice_text
