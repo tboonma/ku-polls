@@ -16,6 +16,7 @@ env:
   - SECRET_KEY="GIMMEAPLZ" DEBUG=True
 
 before_script:
+  - python manage.py makemigrations
   - python manage.py migrate
 
 # script to run tests. Script can have many commands, one per line.
