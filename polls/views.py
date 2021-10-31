@@ -54,6 +54,11 @@ class ResultsView(generic.DetailView):
 def detail(request, question_id):
     """Render details page for individual question."""
     question = get_object_or_404(Question, pk=question_id)
+    if question.pub_date > timezone.now():
+        return HttpResponseNotFound("This poll cannot be voted.")
+    if question.end_date:
+        if question.end_date < timezone.now():
+            return HttpResponseNotFound("This poll cannot be voted.")
     context = {"question": question}
     if request.user.is_authenticated:
         voted = Vote.objects.filter(choice__question=question, user=request.user)
