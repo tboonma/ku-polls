@@ -7,6 +7,7 @@ from django.views import generic
 from django.utils import timezone
 from itertools import chain
 from django.contrib.auth.decorators import login_required
+import logging
 
 
 class IndexView(generic.ListView):
@@ -51,11 +52,13 @@ class ResultsView(generic.DetailView):
 
 
 def detail(request, question_id):
+    """Render details page for individual question."""
     question = get_object_or_404(Question, pk=question_id)
     context = {"question": question}
-    voted = Vote.objects.filter(choice__question=question, user=request.user)
-    if voted:
-        context['voted'] = voted[0].choice
+    if request.user.is_authenticated:
+        voted = Vote.objects.filter(choice__question=question, user=request.user)
+        if voted:
+            context['voted'] = voted[0].choice
     return render(request, "polls/details.html", context)
 
 
