@@ -53,7 +53,7 @@ class ResultsView(generic.DetailView):
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     context = {"question": question}
-    voted = Vote.objects.filter(question=question, user=request.user)
+    voted = Vote.objects.filter(choice__question=question, user=request.user)
     if voted:
         context['voted'] = voted[0].choice
     return render(request, "polls/details.html", context)
@@ -69,11 +69,11 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except Exception:
         return render(request, "polls/details.html", {'question': question, 'error_message': "Please select a choice"})
-    voted_before = Vote.objects.filter(question=question, user=request.user)
+    voted_before = Vote.objects.filter(choice__question=question, user=request.user)
     if voted_before:
         voted = voted_before[0]
         voted.choice = selected_choice
     else:
-        voted = Vote.objects.create(question=question, choice=selected_choice, user=request.user)
+        voted = Vote.objects.create(choice=selected_choice, user=request.user)
     voted.save()
     return HttpResponseRedirect(reverse('polls:results', args=[question.id],))
