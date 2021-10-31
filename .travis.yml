@@ -18,6 +18,12 @@ env:
 before_script:
   - python manage.py makemigrations
   - python manage.py migrate
+  - python manage.py createsuperuser
+  - admin
+  - admin@mail.com
+  - admin
+  - admin
+  - y
 
 # script to run tests. Script can have many commands, one per line.
 script:
