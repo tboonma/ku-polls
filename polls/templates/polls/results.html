@@ -45,7 +45,7 @@
                 {% for choice in question.choice_set.all %}
                 <tr>
                     <td class="text-center">{{ choice.choice_text }}</td>
-                    <td class="text-center">{{ choice.votes }} vote{{ choice.votes|pluralize }}</td>
+                    <td class="text-center">{{ choice.get_votes }} vote{{ choice.get_votes|pluralize }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

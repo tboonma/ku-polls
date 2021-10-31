@@ -23,7 +23,11 @@
             {% for choice in question.choice_set.all %}
                 <tr style="background-color: #f7f7f7; border-bottom: 0;"><td style="padding: 5px">
                     <label class="vote-labl" for="choice{{ forloop.counter }}">
-                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+                        {% if choice == voted %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked/>
+                        {% else %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+                        {% endif %}
                         <div><div>{{ choice.choice_text }}</div></div>
                     </label>
                 </td></tr>
