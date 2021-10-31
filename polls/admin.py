@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 
 
 class ChoiceInline(admin.StackedInline):
@@ -33,12 +33,13 @@ class ChoiceAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Question', {'fields': ['question']}),
-        ('Choice information', {'fields': ['choice_text', 'votes']}),
+        ('Choice information', {'fields': ['choice_text']}),
     ]
-    list_display = ('choice_text', 'question', 'votes')
+    list_display = ('choice_text', 'question')
     list_filter = ['question']
     search_fields = ['choice_text']
 
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice, ChoiceAdmin)
+admin.site.register(Vote)

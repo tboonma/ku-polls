@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
+from django.contrib.auth.models import User
 
 
 class Question(models.Model):
@@ -40,9 +41,24 @@ class Choice(models.Model):
     """Model for Choice, composed of choice text, amount of votes, and question object."""
 
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+    def get_votes(self) -> int:
+        """Get all votes for choice."""
+        return Vote.objects.filter(choice=self).count()
 
     def __str__(self):
         """Generate output for choice object."""
         return self.choice_text
+
+
+class Vote(models.Model):
+    """Model for conducting user voted in each choice."""
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Return value of choice selected."""
+        return self.choice.choice_text
