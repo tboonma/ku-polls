@@ -43,13 +43,13 @@ class Choice(models.Model):
     choice_text = models.CharField(max_length=200)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
-    def get_votes(self) -> int:
-        """Get all votes for choice."""
-        return Vote.objects.filter(choice=self).count()
-
     def __str__(self):
         """Generate output for choice object."""
         return self.choice_text
+
+    def get_votes(self) -> int:
+        """Get all votes for choice."""
+        return Vote.objects.filter(choice=self).count()
 
 
 class Vote(models.Model):
@@ -60,4 +60,4 @@ class Vote(models.Model):
 
     def __str__(self):
         """Return value of choice selected."""
-        return self.choice.choice_text
+        return f"{self.user.username} votes for {self.choice.choice_text} in {self.choice.question.question_text}."
