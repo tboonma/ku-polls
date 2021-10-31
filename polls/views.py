@@ -78,5 +78,7 @@ def vote(request, question_id):
         voted.choice = selected_choice
     else:
         voted = Vote.objects.create(choice=selected_choice, user=request.user)
+    logger = logging.getLogger("polls")
+    logger.info(f"{request.user} votes for {selected_choice.choice_text} in {question.question_text}.")
     voted.save()
     return HttpResponseRedirect(reverse('polls:results', args=[question.id],))
