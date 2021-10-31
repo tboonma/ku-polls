@@ -40,7 +40,7 @@ class ResultsView(generic.DetailView):
         labels = []
         data = []
         for choice in choice_set:
-            data.append(choice.get_votes())
+            data.append(choice.votes)
             labels.append(choice.choice_text)
         context['labels'] = labels
         context['data'] = data

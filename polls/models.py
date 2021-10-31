@@ -47,7 +47,8 @@ class Choice(models.Model):
         """Generate output for choice object."""
         return self.choice_text
 
-    def get_votes(self) -> int:
+    @property
+    def votes(self) -> int:
         """Get all votes for choice."""
         return Vote.objects.filter(choice=self).count()
 
@@ -56,7 +57,7 @@ class Vote(models.Model):
     """Model for conducting user voted in each choice."""
 
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self):
         """Return value of choice selected."""
