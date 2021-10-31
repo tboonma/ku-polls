@@ -1,6 +1,6 @@
 """Module contains functions for link in polls app url to the page."""
 from django.shortcuts import render, get_object_or_404
-from .models import Question
+from .models import Question, Vote
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from django.views import generic
@@ -25,17 +25,6 @@ class IndexView(generic.ListView):
         return result_list
 
 
-class DetailView(generic.DetailView):
-    """Detail page that can let user vote the poll."""
-
-    model = Question
-    template_name = 'polls/details.html'
-
-    def get_queryset(self):
-        """Excludes any questions that ended and aren't published yet."""
-        return Question.objects.filter(pub_date__lte=timezone.now()).exclude(end_date__lte=timezone.now())
-
-
 class ResultsView(generic.DetailView):
     """Result page that shows individual question."""
 
@@ -50,7 +39,7 @@ class ResultsView(generic.DetailView):
         labels = []
         data = []
         for choice in choice_set:
-            data.append(choice.votes)
+            data.append(choice.get_votes())
             labels.append(choice.choice_text)
         context['labels'] = labels
         context['data'] = data
@@ -59,6 +48,15 @@ class ResultsView(generic.DetailView):
     def get_queryset(self):
         """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
+
+
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    context = {"question": question}
+    voted = Vote.objects.filter(question=question, user=request.user)
+    if voted:
+        context['voted'] = voted[0].choice
+    return render(request, "polls/details.html", context)
 
 
 @login_required(login_url='/accounts/login/')
@@ -71,7 +69,11 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except Exception:
         return render(request, "polls/details.html", {'question': question, 'error_message': "Please select a choice"})
+    voted_before = Vote.objects.filter(question=question, user=request.user)
+    if voted_before:
+        voted = voted_before[0]
+        voted.choice = selected_choice
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results', args=[question.id],))
+        voted = Vote.objects.create(question=question, choice=selected_choice, user=request.user)
+    voted.save()
+    return HttpResponseRedirect(reverse('polls:results', args=[question.id],))
