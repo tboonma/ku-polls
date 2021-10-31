@@ -1,4 +1,4 @@
-"""Module contains functions for link url to the page."""
+"""Module contains functions for link in polls app url to the page."""
 from django.shortcuts import render, get_object_or_404
 from .models import Question
 from django.http import HttpResponseRedirect, HttpResponseNotFound
@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from itertools import chain
+from django.contrib.auth.decorators import login_required
 
 
 class IndexView(generic.ListView):
@@ -60,6 +61,7 @@ class ResultsView(generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
 
+@login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """Vote page that process vote privately and return to result page if success."""
     question = get_object_or_404(Question, pk=question_id)
