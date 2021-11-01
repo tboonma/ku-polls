@@ -1,7 +1,7 @@
 language: python
 
 # you can use a different version of Python
-python: "3.8"
+python: "3.6"
 
 # don't clone more than necessary
 git:
@@ -21,6 +21,7 @@ before_script:
 # script to run tests. Script can have many commands, one per line.
 script:
   - flake8 --config config.cfg
+  - python manage.py test
   - coverage run manage.py test
 
 # send the result to Codecov
