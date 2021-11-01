@@ -1,6 +1,7 @@
 """Module contains models for polls app (similar to database)."""
 from django.db import models
 from django.utils import timezone
+import django.contrib.auth.models
 
 
 class Question(models.Model):
@@ -31,9 +32,25 @@ class Choice(models.Model):
     """Model for Choice, composed of choice text, amount of votes, and question object."""
 
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+    # votes = models.IntegerField(default=0)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
         """Generate output for choice object."""
         return f"{self.question.question_text} - {self.choice_text}"
+
+    @property
+    def votes(self) -> int:
+        """Get all votes for choice."""
+        return Vote.objects.filter(choice=self).count()
+
+
+class Vote(models.Model):
+    """Model for conducting user voted in each choice."""
+
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    user = models.ForeignKey(django.contrib.auth.models.User, on_delete=models.CASCADE, null=False, blank=False)
+
+    def __str__(self):
+        """Return value of choice selected."""
+        return self.choice.choice_text
