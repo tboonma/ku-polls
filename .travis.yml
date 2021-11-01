@@ -15,6 +15,10 @@ env:
   # One build will be triggered for each line in the env array.
   - SECRET_KEY="GIMMEAPLZ" DEBUG=True
 
+before_script:
+  - python manage.py migrate
+  - python manage.py createsuperuser
+
 # script to run tests. Script can have many commands, one per line.
 script:
   - flake8 --config config.cfg
