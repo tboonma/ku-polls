@@ -16,7 +16,7 @@ env:
   - SECRET_KEY="GIMMEAPLZ" DEBUG=True
 
 before_script:
-  - python manage.py migrate
+  - python manage.py migrate --run-syncdb
 
 # script to run tests. Script can have many commands, one per line.
 script:
