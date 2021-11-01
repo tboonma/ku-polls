@@ -18,6 +18,7 @@ env:
 before_script:
   - python manage.py migrate
   - python manage.py createsuperuser
+  -
 
 # script to run tests. Script can have many commands, one per line.
 script:
