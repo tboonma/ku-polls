@@ -21,7 +21,7 @@ before_script:
 # script to run tests. Script can have many commands, one per line.
 script:
   - flake8 --config config.cfg
-  - coverage run manage.py test
+  - coverage run manage.py testgit mv
 
 # send the result to Codecov
 after_script:
