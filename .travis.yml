@@ -17,11 +17,10 @@ env:
 
 before_script:
   - python manage.py migrate
-  - python manage.py createsuperuser
-  -
 
 # script to run tests. Script can have many commands, one per line.
 script:
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python manage.py shell
   - flake8 --config config.cfg
   - coverage run manage.py test
 
