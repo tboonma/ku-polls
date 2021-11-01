@@ -1,0 +1,166 @@
+[
+{
+  "model": "polls.question",
+  "pk": 1,
+  "fields": {
+    "question_text": "What can you catch but not throw?",
+    "pub_date": "2021-09-05T08:45:17Z",
+    "end_date": "2021-11-01T06:16:09Z"
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 2,
+  "fields": {
+    "question_text": "What has a face and two hands but no arms?",
+    "pub_date": "2021-09-05T08:53:59Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 21,
+  "fields": {
+    "question_text": "What kind of trip do you prefer?",
+    "pub_date": "2021-09-18T05:56:40Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 22,
+  "fields": {
+    "question_text": "Which place do you prefer to study?",
+    "pub_date": "2021-09-19T05:58:09Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 3,
+  "fields": {
+    "choice_text": "a cold",
+    "question": 1
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 4,
+  "fields": {
+    "choice_text": "a bouquet",
+    "question": 1
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 5,
+  "fields": {
+    "choice_text": "a bird",
+    "question": 1
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 6,
+  "fields": {
+    "choice_text": "a ball",
+    "question": 1
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 7,
+  "fields": {
+    "choice_text": "a radio",
+    "question": 2
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 8,
+  "fields": {
+    "choice_text": "a playing card",
+    "question": 2
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 9,
+  "fields": {
+    "choice_text": "a mirror",
+    "question": 2
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 10,
+  "fields": {
+    "choice_text": "a clock",
+    "question": 2
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 11,
+  "fields": {
+    "choice_text": "Mountain trip",
+    "question": 21
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 12,
+  "fields": {
+    "choice_text": "Beach trip",
+    "question": 21
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 13,
+  "fields": {
+    "choice_text": "Coffee shop",
+    "question": 22
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 14,
+  "fields": {
+    "choice_text": "School/University",
+    "question": 22
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 15,
+  "fields": {
+    "choice_text": "Home",
+    "question": 22
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 3,
+  "fields": {
+    "choice": 4,
+    "user": 1
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 4,
+  "fields": {
+    "choice": 10,
+    "user": 1
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 5,
+  "fields": {
+    "choice": 12,
+    "user": 1
+  }
+}
+]
