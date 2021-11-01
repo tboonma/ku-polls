@@ -20,6 +20,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('signup/', views.signup, name="signup")
+    path('signup/', views.signup, name="signup"),
     path('', include('polls.urls', namespace="polls"))
 ]
