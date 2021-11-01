@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
-from django.contrib.auth.models import User
+import django.contrib.auth.models
 
 
 class Question(models.Model):
@@ -57,7 +57,7 @@ class Vote(models.Model):
     """Model for conducting user voted in each choice."""
 
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(django.contrib.auth.models.User, on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self):
         """Return value of choice selected."""
