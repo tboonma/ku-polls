@@ -1,5 +1,5 @@
 # KU Polls
-
+[![Django CI](https://github.com/tboonma/ku-polls/actions/workflows/django.yml/badge.svg?branch=master)](https://github.com/tboonma/ku-polls/actions/workflows/django.yml)
 [![codecov](https://codecov.io/gh/tboonma/ku-polls/branch/main/graph/badge.svg?token=2MWQ6V5ND5)](https://codecov.io/gh/tboonma/ku-polls)    
 Web application for conducting online polls and surveys in [Kasetsart University](https://www.ku.ac.th/).
 
