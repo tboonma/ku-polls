@@ -28,18 +28,4 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['question_text']
 
 
-class ChoiceAdmin(admin.ModelAdmin):
-    """Custom choice list in admin page."""
-
-    fieldsets = [
-        ('Question', {'fields': ['question']}),
-        ('Choice information', {'fields': ['choice_text']}),
-    ]
-    list_display = ('choice_text', 'question')
-    list_filter = ['question']
-    search_fields = ['choice_text']
-
-
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Choice, ChoiceAdmin)
-admin.site.register(Vote)
