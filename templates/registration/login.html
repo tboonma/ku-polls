@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>KU Polls:: Login</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>KU Polls::Login</title>
+{% endblock %}
+
+{% block main_content %}
     <h2>Login</h2>
     <form method="POST">
       {% csrf_token %}
@@ -19,5 +19,4 @@
     <p>
     <a href="{% url 'password_reset' %}">Forgot password?</a>
     </p>
-</body>
-</html>
+{% endblock %}
