@@ -1,6 +1,6 @@
 """Test for voting poll."""
 from django.test import TestCase
-from polls.models import Choice
+from polls.models import Choice, Vote
 from django.urls import reverse
 from .test_questions import create_question
 from django.contrib.auth.models import User
@@ -76,3 +76,34 @@ class QuestionVoteTests(TestCase):
         response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.ended_question.id}),
                                     {'choice': choice1.id})
         self.assertEqual(response.status_code, 302)
+
+    def test_vote_description(self):
+        """Test the vote description to make sure that system process vote correctly."""
+        choice1 = Choice.objects.create(choice_text="1", question=self.recent_question)
+        response = self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}),
+                                    {'choice': choice1.id})
+        self.assertEqual(response.status_code, 302)
+        choice1 = Choice.objects.get(id=choice1.id)
+        self.assertEqual(1, choice1.votes)
+        vote = Vote.objects.filter(user=self.user1, choice__question=self.recent_question)
+        self.assertEqual(str(vote[0]), f"{self.user1.username} votes for "
+                                       f"{choice1.choice_text} in {self.recent_question.question_text}.")
+
+    def test_change_answer(self):
+        """Test changing the answered vote."""
+        choice1 = Choice.objects.create(choice_text="8", question=self.recent_question)
+        choice2 = Choice.objects.create(choice_text="9", question=self.recent_question)
+        self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}),
+                         {'choice': choice1.id})
+        # Get new choice object status
+        choice1 = Choice.objects.get(id=choice1.id)
+        choice2 = Choice.objects.get(id=choice2.id)
+        self.assertEqual(1, choice1.votes)
+        self.assertEqual(0, choice2.votes)
+        self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}),
+                         {'choice': choice2.id})
+        # Get new choice object status
+        choice1 = Choice.objects.get(id=choice1.id)
+        choice2 = Choice.objects.get(id=choice2.id)
+        self.assertEqual(0, choice1.votes)
+        self.assertEqual(1, choice2.votes)

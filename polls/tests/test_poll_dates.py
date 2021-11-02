@@ -1,22 +1,30 @@
 """Test with polls pub_date and end_date."""
 from django.test import TestCase
-from polls.models import Question
+from polls.models import Question, Choice
 from django.utils import timezone
 import datetime
 from django.urls import reverse
-from .test_questions import QuestionTests
+from .test_questions import QuestionTests, create_question
+from django.contrib.auth.models import User
 
 
-def create_question(question_text, days, end_day=None):
-    """Create a question with the given `question_text` and published the \
-    given number of `days` offset to now (negative for questions published \
-    in the past, positive for questions that have yet to be published)."""
-    time = timezone.now() + datetime.timedelta(days=days)
-    if end_day is not None:
-        end_time = timezone.now() + datetime.timedelta(days=end_day)
-        return Question.objects.create(question_text=question_text, pub_date=time, end_date=end_time)
-    else:
-        return Question.objects.create(question_text=question_text, pub_date=time)
+def mock_user(username: str, password: str) -> User:
+    """Create Mock object user.
+
+    Args:
+        username: username to create mock user.
+        password: password to create mock user.
+
+    Returns:
+        object User that is the identity of this user.
+    """
+    user1 = User.objects.create_user(
+        username=username,
+        email="testuser@mail.com",
+        password=password)
+    user1.first_name = "Tester"
+    user1.save()
+    return user1
 
 
 class QuestionModelTests(TestCase):
@@ -90,6 +98,27 @@ class QuestionDetailViewTests(QuestionTests):
         """View the question that gonna be available in the future."""
         response = self.client.get(reverse('polls:detail', kwargs={'question_id': self.future_question.id}))
         self.assertEqual(response.status_code, 404)
+
+    def test_view_almost_end_question(self):
+        """View the question that is going to be ended."""
+        question = create_question(question_text="Past question.", days=-10, end_day=1)
+        response = self.client.get(reverse('polls:detail', kwargs={'question_id': question.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_with_last_selected_choice(self):
+        """View the available question with last selected choice."""
+        mock_user("testuser", "HelloIamhere!")
+        form_data = {'username': "testuser", 'password': "HelloIamhere!"}
+        self.client.post(reverse("login"), form_data)
+        choice1 = Choice.objects.create(choice_text="1", question=self.recent_question)
+        response = self.client.get(reverse('polls:detail', kwargs={'question_id': self.recent_question.id}))
+        self.assertEquals(200, response.status_code)
+        self.client.post(reverse('polls:vote', kwargs={'question_id': self.recent_question.id}),
+                         {'choice': choice1.id})
+        choice1 = Choice.objects.get(id=choice1.id)
+        self.assertEqual(1, choice1.votes)
+        response = self.client.get(reverse('polls:detail', kwargs={'question_id': self.recent_question.id}))
+        self.assertEqual(response.context['voted'], choice1)
 
 
 class QuestionResultViewTests(QuestionTests):
