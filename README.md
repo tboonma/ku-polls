@@ -58,7 +58,7 @@ Web application for conducting online polls and surveys in [Kasetsart University
 9. Run this command to migrate the database.
 
     ```
-    python manage.py migrate
+    python manage.py migrate --run-syncdb
     ```
 10. Initialize data
     ```
