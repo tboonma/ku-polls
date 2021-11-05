@@ -9,7 +9,9 @@ import logging
 
 def signup(request):
     """Register a new user."""
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('polls:index')
+    elif request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
