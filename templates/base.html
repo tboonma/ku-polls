@@ -40,14 +40,14 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                            <li><a class="dropdown-item" href="/accounts/password_change">Change Password</a></li>
+                            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
                         </ul>
                     </li>
                 </ul>
-                <a class="btn btn-outline-light" style="float: right;" href="/accounts/logout">Logout</a>
+                <a class="btn btn-outline-light" style="float: right;" href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <a class="btn btn-outline-light me-2" style="float: right;" href="/accounts/login">Login</a>
-                <a class="btn btn-outline-light" style="float: right;" href="/signup">Signup</a>
+                <a class="btn btn-outline-light me-2" style="float: right;" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-outline-light" style="float: right;" href="{% url 'signup' %}">Signup</a>
             {% endif %}
         </div>
     </div>

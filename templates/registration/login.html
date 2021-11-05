@@ -1,23 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>KU Polls:: Login</title>
-</head>
-<body>
-    <h2>Login</h2>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <title>KU Polls::Login</title>
+{% endblock %}
+
+{% block main_content %}
+    <div style="padding: 20px 0;">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="w-full d-flex align-items-center justify-content-center" style="padding-top: 20px;">
+            <h1 style="color: #009879;">Login</h1>
+        </div>
+    </div>
+    </div>
     <form method="POST">
-      {% csrf_token %}
-      <table style="padding: 2ex;">
-      {{ form.as_table }}
+        {% csrf_token %}
+
+        <table style="padding: 2ex;">
+            {% for field in form %}
+                <div class="row">
+                   <div class="col-md-2">
+                    {{ field.label_tag }}
+                    {% if field.help_text %}
+                      <sup>{{ field.help_text }}</sup>
+                    {% endif %}
+                    {{ field.errors }}
+                   </div><div class="col-md-10 pull-left">
+                     {{ field }}
+                   </div>
+                </div>
+            {% endfor %}
       </table>
+        <span style="color: red;">{{ form.non_field_errors }}</span>
       <button type="submit">Login</button>
       <!-- if your app redirects user to login before accessing some pages, then next contains return url -->
-      <input type="hidden" name="next" value="{{next}}" />
+      <input type="hidden" name="next" value="{{ next }}" />
     </form>
-    {# If you have written a password_reset template, then add here #}
     <p>
     <a href="{% url 'password_reset' %}">Forgot password?</a>
+    <a href="{% url 'signup' %}">Signup</a>
     </p>
-</body>
-</html>
+{% endblock %}
