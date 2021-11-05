@@ -5,4 +5,6 @@ branch = True
 cover_pylib = False
 # omit uninteresting files
 omit =
-    */migrations/*
+    */migrations/*,
+    .venv/*,
+    venv/*
