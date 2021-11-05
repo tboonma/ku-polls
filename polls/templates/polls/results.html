@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block main_content %}
-    <div class="d-flex align-items-center justify-content-center" style="padding: 40px 20px 0 20px;">
-        <div class="row justify-content-between w-75" style="max-width: 600px">
+    <div class="d-flex align-items-center justify-content-center" style="padding: 40px 15px 0 15px;">
+        <div class="row justify-content-between" style="width: 90%; max-width: 600px">
             <div class="col-6"><a class="vote-btn back-btn home-btn btn btn-primary" href="/" role="button"><span>Home</span></a></div>
-            <div class="col-6"><button class="btn btn-primary" onClick="generate_chart();" style="float: right !important;"><span>Regenerate color</span></button></div>
+            <div class="col-6"><button class="btn btn-primary" onClick="generate_chart();" style="float: right !important;">Change color</button></div>
         </div>
     </div>
     <div class="d-flex align-items-center justify-content-center" style="padding: 0 20px 0 20px;">
-        <table class="content-table w-75" style="background-color: white; max-width: 600px;">
+        <table class="content-table" style="background-color: white; max-width: 600px; width: 90%;">
             <thead>
             <tr>
                 <th class="text-center"><h2>{{ question.question_text }}</h2></th>
@@ -31,7 +31,7 @@
         </table>
     </div>
     <div class="d-flex align-items-center justify-content-center" style="padding: 40px 20px 20px 20px;">
-        <table class="content-table w-75" style="max-width: 600px">
+        <table class="content-table" style="max-width: 600px; width: 90%;">
             <thead>
                 <tr>
                     <th class="text-center" colspan="2" style="font-size: 16px;">Details</th>

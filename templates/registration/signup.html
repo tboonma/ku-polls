@@ -5,16 +5,43 @@
 {% endblock %}
 
 {% block main_content %}
-<h2>Register</h2>
-<form method="POST">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    <tr>
-    <td colspan="2">
-    <button class="btn btn-primary" type="submit">Register</button>
-    </td>
-    </tr>
-    </table>
-</form>
+    <div style="padding: 20px 0;">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="w-full d-flex align-items-center justify-content-center" style="padding-top: 20px;">
+                <h1 style="color: #009879;">Register</h1>
+            </div>
+        </div>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="w-100 d-flex justify-content-center">
+            <div class="w-75" style="max-width: 400px;">
+                <table class="d-flex justify-content-center align-items-center" style="padding: 2px;">
+                    {% for field in form %}
+                        <div class="row">
+                            <h5 style="color: #009879;">{{ field.label_tag }}</h5>
+                        </div>
+                        <div class="row" style="width: 99%; margin-left: 2px; margin-bottom: 10px">
+                            {{ field }}
+                            {% if field.help_text %}
+                                <span>{{ field.help_text }}</span>
+                            {% endif %}
+                            <span style="color: red;">{{ field.errors }}</span>
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        <span style="color: red;">{{ form.non_field_errors }}</span>
+                    </div>
+                    <div class="row" style="margin-top: 20px;margin-right:-10px;">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-outline-success" type="submit" style="max-width: 120px">Register</button>
+                        </div>
+                    </div>
+                </table>
+            </div>
+        </div>
+
+        <!-- if your app redirects user to login before accessing some pages, then next contains return url -->
+        <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+    </form>
 {% endblock %}
